@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "DOG-GS: Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatting"
+version: 0.1.0
+date-released: 2026-11-15
+license: MIT
+repository-code: "https://github.com/helmymukti/dog-gs"
+keywords: [3D Gaussian Splatting, orthophoto, UAV, photogrammetry, georeferencing, DSM]
+authors:
+  - family-names: Wijaya
+    given-names: Helmy Mukti
+    affiliation: "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"

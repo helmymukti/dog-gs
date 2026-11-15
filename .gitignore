@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.so
+*.dll
+*.dylib
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+doggs_out/
+*.tif
+!tests/data/*.tif

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dog-gs"
+version = "0.1.0"
+description = "DOG-GS: Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatting"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Helmy Mukti Wijaya" }]
+keywords = ["3D Gaussian Splatting", "orthophoto", "UAV", "photogrammetry", "georeferencing", "GeoSplat", "DSM"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = ["numpy>=1.22", "tifffile>=2022.5"]
+
+[project.optional-dependencies]
+fast = ["numba>=0.57"]
+validate = ["opencv-python>=4.7"]
+all = ["numba>=0.57", "opencv-python>=4.7"]
+test = ["pytest"]
+
+[project.scripts]
+doggs = "doggs.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/helmymukti/dog-gs"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+doggs = ["_ortho.c"]
