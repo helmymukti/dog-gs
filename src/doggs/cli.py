@@ -16,8 +16,29 @@ def _floats(s, n):
     return v
 
 
+def resolve_input(path):
+    """Accept a PLY file or a GeoSplat project folder; return (ply_path, default_output_dir)."""
+    p = Path(path)
+    if p.is_file():
+        return p, p.parent / "DOG-GS_output"
+    if not p.is_dir():
+        raise SystemExit(f"input not found: {p}")
+    for pattern in ("gaussians_utm*_hcorr.ply", "gaussians_utm*.ply", "point_cloud.ply"):
+        hits = sorted(p.rglob(pattern), key=lambda q: (len(q.parts), str(q)))
+        if pattern == "point_cloud.ply":
+            hits = sorted(hits, key=lambda q: str(q), reverse=True)     # prefer the latest iteration
+        if hits:
+            print("input PLY:", hits[0])
+            return hits[0], p / "11_DOG-GS"
+    raise SystemExit(f"no Gaussian PLY found in {p}")
+
+
 def cmd_render(a):
     from .render import render_orthophoto
+    ply, default_out = resolve_input(a.ply)
+    a.ply = str(ply)
+    if a.out is None:
+        a.out = str(default_out)
     res = render_orthophoto(a.ply, gsd=a.gsd, colour_mode=a.colour, crs_json=a.crs_json, epsg=a.epsg,
                             offset=_floats(a.offset, 3) if a.offset else None,
                             bounds=_floats(a.bounds, 4) if a.bounds else None,
@@ -78,8 +99,8 @@ def main(argv=None):
     sp = p.add_subparsers(dest="cmd", required=True)
 
     r = sp.add_parser("render", help="render orthophoto + DSM GeoTIFFs from a georeferenced 3DGS PLY")
-    r.add_argument("ply")
-    r.add_argument("-o", "--out", default="doggs_out")
+    r.add_argument("ply", help="Gaussian PLY file, or a GeoSplat project folder")
+    r.add_argument("-o", "--out", help="output folder (default: <project>/11_DOG-GS or <ply folder>/DOG-GS_output)")
     r.add_argument("--stem", default="doggs")
     r.add_argument("--gsd", type=float, default=0.06, help="ground sampling distance in metres (default 0.06)")
     r.add_argument("--colour", "--color", choices=["sh", "dc"], default="sh", help="SH at nadir (sh) or view-independent DC")

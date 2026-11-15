@@ -48,6 +48,15 @@ Backends (`--backend auto` picks the first available):
 
 All three run the same compositing kernel; the test-suite checks that they agree.
 
+## Windows: drag-and-drop
+
+1. Double-click `windows/install_DOG-GS.bat` once (uses Anaconda if present, otherwise `py`/`python`;
+   installs DOG-GS with numba and OpenCV).
+2. Drag a Gaussian `.ply` **or a whole GeoSplat project folder** onto `windows/DOG-GS_render.bat`.
+   Answer the prompts (GSD, optional height window, colour mode) or just press Enter for defaults.
+   For a GeoSplat folder the `*_hcorr` UTM export is picked automatically and results are written to
+   `<project>\11_DOG-GS\`; for a single PLY to `DOG-GS_output\` next to it.
+
 ## Usage
 
 ```bash
