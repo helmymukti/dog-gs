@@ -501,9 +501,14 @@ class Main(QMainWindow):
         e = environment()
         self.env = e
         part = lambda ok, name: f"<span style='color:{OK if ok else BAD}'>{'✓' if ok else '✗'} {name}</span>"  # noqa: E731
-        self.pre.setText("&nbsp;&nbsp;".join([part(e["numba"], "Numba"), part(e["c"], "C backend"),
-                                              part(e["opencv"], "OpenCV")]))
-        self.bbuild.setVisible(not e["c"])
+        if e["c"]:
+            cpart = part(True, "C backend")
+        elif e["numba"]:
+            cpart = f"<span style='color:{MUTED}'>– C backend (optional)</span>"
+        else:
+            cpart = part(False, "C backend")
+        self.pre.setText("&nbsp;&nbsp;".join([part(e["numba"], "Numba"), cpart, part(e["opencv"], "OpenCV")]))
+        self.bbuild.setVisible(not e["c"] and not e["numba"])
 
     def set_files(self, files):
         for f in files:
