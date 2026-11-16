@@ -519,6 +519,15 @@ class Main(QMainWindow):
                 if ply is None:
                     QMessageBox.warning(self, about.NAME, f"No Gaussian PLY found in:\n{p}")
                     continue
+                if "hcorr" not in ply.name and root is not None:
+                    better = sorted(Path(root).rglob(ply.stem + "_hcorr.ply"))
+                    if better and QMessageBox.question(
+                            self, about.NAME,
+                            f"This model's heights are not datum-corrected:\n{ply.name}\n\n"
+                            f"A vertically corrected version exists (GeoSplat stage 6):\n{better[0]}\n\n"
+                            "Use the corrected model? (recommended; the orthophoto is identical, the DSM heights "
+                            "then match the RTK checkpoints)") == QMessageBox.Yes:
+                        ply = better[0]
                 self.ply, self.root = str(ply), root
                 self.out_dir = default_output(ply, root)
                 self.ortho_path = None
