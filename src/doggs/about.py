@@ -12,6 +12,9 @@ FULL_NAME = "Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatti
 TAGLINE = "Georeferenced 3D Gaussian Splatting to true orthophoto and DSM"
 REPO_URL = "https://github.com/helmymukti/dog-gs"
 LICENSE = "MIT"
+# Zenodo: DOI of this version and the concept DOI (always resolves to the latest version)
+DOI = "10.5281/zenodo.24268777"
+CONCEPT_DOI = "10.5281/zenodo.24268776"
 YEAR = 2026
 
 AFFILIATIONS = {
@@ -58,7 +61,7 @@ def citation_apa() -> str:
         parts = name.split()
         names.append(name if len(parts) == 1 else f"{parts[-1]}, " + " ".join(p[0] + "." for p in parts[:-1]))
     who = ", ".join(names[:-1]) + ", & " + names[-1]
-    return f"{who} ({YEAR}). {NAME}: {FULL_NAME} (Version {__version__}) [Computer software]. {REPO_URL}"
+    return f"{who} ({YEAR}). {NAME}: {FULL_NAME} (Version {__version__}) [Computer software]. Zenodo. https://doi.org/{DOI}"
 
 
 def citation_bibtex() -> str:
@@ -69,13 +72,15 @@ def citation_bibtex() -> str:
             f"  title   = {{{NAME}: {FULL_NAME}}},\n"
             f"  version = {{{__version__}}},\n"
             f"  year    = {{{YEAR}}},\n"
+            f"  doi     = {{{DOI}}},\n"
             f"  url     = {{{REPO_URL}}},\n"
+            "  publisher = {Zenodo},\n"
             f"  license = {{{LICENSE}}}\n}}")
 
 
 def provenance() -> dict:
     """Embedded in every product's metadata so outputs stay attributable."""
-    return {"software": NAME, "version": __version__, "repository": REPO_URL, "licence": LICENSE,
+    return {"software": NAME, "version": __version__, "repository": REPO_URL, "doi": DOI, "licence": LICENSE,
             "authors": [{"name": n, "affiliation": AFFILIATIONS[a], **({"corresponding": CORRESPONDENCE} if c else {})}
                         for n, a, c in AUTHORS],
             "cite": citation_apa()}

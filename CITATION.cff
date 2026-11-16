@@ -4,6 +4,14 @@ title: "DOG-GS: Direct Orthophoto Generation from Georeferenced 3D Gaussian Spla
 version: 0.1.0
 date-released: 2026-11-16
 license: MIT
+doi: "10.5281/zenodo.24268777"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24268777"
+    description: "DOI of version 0.1.0"
+  - type: doi
+    value: "10.5281/zenodo.24268776"
+    description: "Concept DOI (all versions, resolves to the latest)"
 repository-code: "https://github.com/helmymukti/dog-gs"
 authors:
   - family-names: Wijaya

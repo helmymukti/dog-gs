@@ -1,5 +1,7 @@
 # DOG-GS — Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatting
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24268777.svg)](https://doi.org/10.5281/zenodo.24268777)
+
 DOG-GS renders a **true orthophoto** and a **median-depth DSM** directly from a georeferenced
 3D Gaussian Splatting (3DGS) model — for example the UTM export of
 [GeoSplat](https://github.com/helmymukti/GeoSplat) v0.2.0 — with an orthographic (nadir) Gaussian
@@ -158,7 +160,11 @@ pip install ".[test]" && pytest
 ## How to cite
 
 > Wijaya, H. M., Handayani, H. H., Hariyanto, T., & Harintaka (2026). DOG-GS: Direct Orthophoto Generation
-> from Georeferenced 3D Gaussian Splatting (Version 0.1.0) [Computer software]. https://github.com/helmymukti/dog-gs
+> from Georeferenced 3D Gaussian Splatting (Version 0.1.0) [Computer software]. Zenodo.
+> https://doi.org/10.5281/zenodo.24268777
+
+To cite the software independently of the version, use the concept DOI
+[10.5281/zenodo.24268776](https://doi.org/10.5281/zenodo.24268776), which always resolves to the latest release.
 
 BibTeX and the full citation metadata are in `CITATION.cff` (also available from *Help → How to cite* in
 the app). Please also cite 3D Gaussian Splatting (Kerbl et al., 2023, *ACM TOG* 42(4)) and, when the
