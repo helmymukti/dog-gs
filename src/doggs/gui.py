@@ -634,12 +634,15 @@ class Main(QMainWindow):
         self.thread.started.connect(self.worker.run)
         self.worker.log.connect(self.on_log)
         self.worker.stage.connect(self.set_stage)
-        self.worker.progress.connect(lambda f: self.bar.setValue(int(f * 1000)))
+        self.worker.progress.connect(self.on_progress)          # bound slot -> queued to the GUI thread
         self.worker.finished.connect(self.on_done)
         self.thread.start()
         self.t_start = time.time()
         self.now.setText("Running…")
         self.update_buttons()
+
+    def on_progress(self, f):
+        self.bar.setValue(int(f * 1000))
 
     def on_log(self, line):
         if line.strip():
@@ -682,18 +685,17 @@ class Main(QMainWindow):
         self.bworker = BuildWorker()
         self.bworker.moveToThread(self.bthread)
         self.bthread.started.connect(self.bworker.run)
-
-        def done(ok, msg):
-            self.bthread.quit()
-            self.bthread.wait()
-            self.bbuild.setEnabled(True)
-            self.bbuild.setText("Build C backend…")
-            self.refresh_env()
-            (QMessageBox.information if ok else QMessageBox.warning)(
-                self, about.NAME, ("C backend built:\n" if ok else "C backend could not be built:\n") + msg)
-
-        self.bworker.finished.connect(done)
+        self.bworker.finished.connect(self.on_built)          # bound slot -> runs in the GUI thread
         self.bthread.start()
+
+    def on_built(self, ok, msg):
+        self.bthread.quit()
+        self.bthread.wait()
+        self.bbuild.setEnabled(True)
+        self.bbuild.setText("Build C backend…")
+        self.refresh_env()
+        (QMessageBox.information if ok else QMessageBox.warning)(
+            self, about.NAME, ("C backend built:\n" if ok else "C backend could not be built:\n") + msg)
 
     def closeEvent(self, e):
         if self.thread:
@@ -707,7 +709,36 @@ class Main(QMainWindow):
         e.accept()
 
 
+CRASH_LOG = Path.home() / "DOG-GS_crash.log"
+
+
+def _install_crash_logging():
+    """pythonw has no console: keep tracebacks and fatal errors in ~/DOG-GS_crash.log."""
+    import faulthandler
+    import traceback
+    try:
+        fh = open(CRASH_LOG, "a", encoding="utf-8")
+        fh.write(f"\n=== DOG-GS {__version__} started {time.strftime('%Y-%m-%d %H:%M:%S')} ===\n")
+        fh.flush()
+        faulthandler.enable(fh, all_threads=True)
+    except OSError:
+        return
+
+    def hook(et, ev, tb):
+        fh.write("".join(traceback.format_exception(et, ev, tb)))
+        fh.flush()
+        try:
+            QMessageBox.critical(None, about.NAME, f"Unexpected error:\n{ev}\n\nDetails were written to {CRASH_LOG}")
+        except Exception:  # noqa: BLE001
+            pass
+
+    sys.excepthook = hook
+    import threading
+    threading.excepthook = lambda a: hook(a.exc_type, a.exc_value, a.exc_traceback)
+
+
 def main():
+    _install_crash_logging()
     app = QApplication(sys.argv)
     app.setApplicationName(about.NAME)
     app.setApplicationVersion(__version__)
