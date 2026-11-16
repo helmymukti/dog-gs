@@ -647,6 +647,11 @@ class Main(QMainWindow):
     def on_log(self, line):
         if line.strip():
             self.logw.appendPlainText(line)
+            try:
+                with open(CRASH_LOG, "a", encoding="utf-8") as f:
+                    f.write(line.rstrip() + "\n")
+            except OSError:
+                pass
 
     def on_done(self, ok):
         self.thread.quit()
@@ -709,11 +714,11 @@ class Main(QMainWindow):
         e.accept()
 
 
-CRASH_LOG = Path.home() / "DOG-GS_crash.log"
+CRASH_LOG = (ROOT / "DOG-GS_crash.log") if os.access(ROOT, os.W_OK) else (Path.home() / "DOG-GS_crash.log")
 
 
 def _install_crash_logging():
-    """pythonw has no console: keep tracebacks and fatal errors in ~/DOG-GS_crash.log."""
+    """pythonw has no console: keep tracebacks and fatal errors in DOG-GS_crash.log (app folder)."""
     import faulthandler
     import traceback
     try:

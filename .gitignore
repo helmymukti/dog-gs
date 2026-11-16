@@ -10,3 +10,4 @@ dist/
 doggs_out/
 *.tif
 !tests/data/*.tif
+DOG-GS_crash.log
