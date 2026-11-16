@@ -2,7 +2,7 @@
 
 DOG-GS renders a **true orthophoto** and a **median-depth DSM** directly from a georeferenced
 3D Gaussian Splatting (3DGS) model — for example the UTM export of
-[GeoSplat](https://github.com/helmymukti) v0.2.0 — with an orthographic (nadir) Gaussian
+[GeoSplat](https://github.com/helmymukti/GeoSplat) v0.2.0 — with an orthographic (nadir) Gaussian
 rasterization operator. No dense point cloud, mesh, DSM interpolation or orthorectification
 step is needed: one rendering pass produces georeferenced GeoTIFFs.
 
@@ -36,6 +36,7 @@ Pixel (row, col) is centred at `E = E₀ + (col + ½)·gsd`, `N = N_top − (row
 ```bash
 pip install .                 # numpy + tifffile only
 pip install ".[all]"          # + numba (fast parallel backend) and opencv (validation tools)
+pip install ".[all,gui]"      # + PySide6 desktop app  (run: doggs-gui  or  python -m doggs.gui)
 ```
 
 Backends (`--backend auto` picks the first available):
@@ -48,14 +49,22 @@ Backends (`--backend auto` picks the first available):
 
 All three run the same compositing kernel; the test-suite checks that they agree.
 
-## Windows: drag-and-drop
+## Desktop app (Windows)
 
-1. Double-click `windows/install_DOG-GS.bat` once (uses Anaconda if present, otherwise `py`/`python`;
-   installs DOG-GS with numba and OpenCV).
-2. Drag a Gaussian `.ply` **or a whole GeoSplat project folder** onto `windows/DOG-GS_render.bat`.
-   Answer the prompts (GSD, optional height window, colour mode) or just press Enter for defaults.
-   For a GeoSplat folder the `*_hcorr` UTM export is picked automatically and results are written to
-   `<project>\11_DOG-GS\`; for a single PLY to `DOG-GS_output\` next to it.
+1. Double-click **`DOG-GS.bat`**. The first run creates a private `.venv` in this folder and installs
+   DOG-GS with Numba, OpenCV and PySide6 (Python 3.9+ and an internet connection are needed once).
+2. **Drop a GeoSplat project folder** (or any georeferenced Gaussian `.ply`) into the window.
+   From a GeoSplat folder the vertically corrected UTM model `…/10_Vertical_Correction/gaussians_utm_…_hcorr.ply`
+   and the GeoSplat checkpoint file are picked automatically. Optionally drop an RTK checkpoint `.csv`
+   and a reference orthophoto `.tif` as well.
+3. Check the settings (GSD, colour mode, backend, height window — *Automatic* removes floaters near
+   the camera path) and press **Start**.
+
+The app shows the six processing stages, a log and a preview, and writes everything to
+`<project>\11_DOG-GS\` (or `DOG-GS_output\` next to a single PLY):
+`*_ortho.tif`, `*_dsm.tif`, `*_meta.json`, `*_report.json` and, when checkpoints were given, `*_check_z.csv`.
+You can also drag a folder or PLY onto `DOG-GS.bat` itself, or use `windows/DOG-GS_render.bat` for a
+command-line run without the window.
 
 ## Usage
 
@@ -65,7 +74,7 @@ doggs render gaussians_utm_epsg32749_offset_hcorr.ply -o out --stem ITS \
       --gsd 0.06 --zmin 20 --zmax 110
 
 # any 3DGS PLY in a projected CRS
-doggs render point_cloud.ply --epsg 32749 --offset "698000 9194000 0" --gsd 0.05
+doggs render point_cloud.ply --epsg 32749 --offset "698000 9194000 0" --gsd 0.05 --zmin auto --zmax auto
 
 # validation (needs opencv-python)
 doggs check-z  out/ITS_dsm.tif   rtk_points.csv --classes NVA,VVA --csv dz.csv
@@ -114,12 +123,25 @@ res.save("out", stem="ITS")
 pip install ".[test]" && pytest
 ```
 
-## Citation
+## Authors
 
-If you use DOG-GS, please cite the software (see `CITATION.cff`) and the accompanying paper:
+| Name | Affiliation |
+|---|---|
+| **Helmy Mukti Wijaya**<sup>1,*</sup> | Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia |
+| Hepi Hapsari Handayani<sup>1</sup> | Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia |
+| Teguh Hariyanto<sup>1</sup> | Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia |
+| Harintaka<sup>2</sup> | Department of Geomatics Engineering, Universitas Gadjah Mada (UGM), Yogyakarta, Indonesia |
 
-> Wijaya, H. M. DOG-GS: Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatting for
-> Rapid Reconnaissance-Grade UAV Mapping (manuscript in preparation).
+<sup>*</sup> Corresponding author: helmy.mukti.wijaya@gmail.com
+
+## How to cite
+
+> Wijaya, H. M., Handayani, H. H., Hariyanto, T., & Harintaka (2026). DOG-GS: Direct Orthophoto Generation
+> from Georeferenced 3D Gaussian Splatting (Version 0.1.0) [Computer software]. https://github.com/helmymukti/dog-gs
+
+BibTeX and the full citation metadata are in `CITATION.cff` (also available from *Help → How to cite* in
+the app). Please also cite 3D Gaussian Splatting (Kerbl et al., 2023, *ACM TOG* 42(4)) and, when the
+model was produced with it, GeoSplat (https://github.com/helmymukti/GeoSplat).
 
 ## License
 

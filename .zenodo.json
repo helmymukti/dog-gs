@@ -3,9 +3,39 @@
   "upload_type": "software",
   "description": "DOG-GS renders a true orthophoto and a median-depth DSM directly from a georeferenced 3D Gaussian Splatting model (e.g. the UTM export of GeoSplat v0.2.0) using an orthographic Gaussian rasterization operator with front-to-back alpha compositing, and provides validation tools (DSM vs GNSS, horizontal checkpoints, relative comparison with a reference orthophoto).",
   "creators": [
-    {"name": "Wijaya, Helmy Mukti", "affiliation": "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS)"}
+    {
+      "name": "Wijaya, Helmy Mukti",
+      "affiliation": "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+    },
+    {
+      "name": "Handayani, Hepi Hapsari",
+      "affiliation": "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+    },
+    {
+      "name": "Hariyanto, Teguh",
+      "affiliation": "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+    },
+    {
+      "name": "Harintaka",
+      "affiliation": "Department of Geomatics Engineering, Universitas Gadjah Mada (UGM), Yogyakarta, Indonesia"
+    }
   ],
   "license": "MIT",
-  "keywords": ["3D Gaussian Splatting", "orthophoto", "UAV", "photogrammetry", "georeferencing", "DSM", "GeoSplat"],
-  "access_right": "open"
+  "keywords": [
+    "3D Gaussian Splatting",
+    "orthophoto",
+    "UAV",
+    "photogrammetry",
+    "georeferencing",
+    "DSM",
+    "GeoSplat"
+  ],
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/helmymukti/GeoSplat",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
+    }
+  ]
 }

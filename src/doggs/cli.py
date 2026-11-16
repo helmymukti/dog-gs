@@ -9,6 +9,10 @@ from pathlib import Path
 from . import __version__
 
 
+def _zarg(s):
+    return "auto" if str(s).lower() == "auto" else float(s)
+
+
 def _floats(s, n):
     v = [float(x) for x in s.replace(",", " ").split()]
     if len(v) != n:
@@ -111,8 +115,8 @@ def main(argv=None):
     r.add_argument("--no-region", action="store_true", help="ignore the GeoSplat valid region")
     r.add_argument("--region-scale", type=float, default=1.0)
     r.add_argument("--mask-region", action="store_true", help="set alpha=0 outside the valid region")
-    r.add_argument("--zmin", type=float, help="drop Gaussians below this height (true datum)")
-    r.add_argument("--zmax", type=float, help="drop Gaussians above this height (true datum), e.g. floaters")
+    r.add_argument("--zmin", type=_zarg, help="drop Gaussians below this height (true datum), or 'auto'")
+    r.add_argument("--zmax", type=_zarg, help="drop Gaussians above this height (true datum, floaters), or 'auto'")
     r.add_argument("--max-scale", type=float, default=20.0, help="drop Gaussians with an axis std > this (m)")
     r.add_argument("--min-opacity", type=float, default=1 / 255)
     r.add_argument("--min-alpha", type=float, default=0.5, help="DSM nodata where accumulated opacity < this")

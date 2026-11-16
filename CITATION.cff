@@ -1,12 +1,37 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If you use DOG-GS, please cite it as below, together with 3D Gaussian Splatting and, where applicable, GeoSplat."
 title: "DOG-GS: Direct Orthophoto Generation from Georeferenced 3D Gaussian Splatting"
 version: 0.1.0
-date-released: 2026-11-15
+date-released: 2026-11-16
 license: MIT
 repository-code: "https://github.com/helmymukti/dog-gs"
-keywords: [3D Gaussian Splatting, orthophoto, UAV, photogrammetry, georeferencing, DSM]
 authors:
   - family-names: Wijaya
     given-names: Helmy Mukti
     affiliation: "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+    email: helmy.mukti.wijaya@gmail.com
+  - family-names: Handayani
+    given-names: Hepi Hapsari
+    affiliation: "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+  - family-names: Hariyanto
+    given-names: Teguh
+    affiliation: "Department of Geomatics Engineering, Institut Teknologi Sepuluh Nopember (ITS), Surabaya, Indonesia"
+  - name: Harintaka
+    affiliation: "Department of Geomatics Engineering, Universitas Gadjah Mada (UGM), Yogyakarta, Indonesia"
+keywords: [UAV, photogrammetry, orthophoto, "true orthophoto", DSM, "3D Gaussian Splatting", georeferencing, GeoSplat]
+references:
+  - type: article
+    title: "3D Gaussian Splatting for Real-Time Radiance Field Rendering"
+    authors: [{family-names: Kerbl, given-names: Bernhard}, {family-names: Kopanas, given-names: Georgios},
+              {family-names: Leimkühler, given-names: Thomas}, {family-names: Drettakis, given-names: George}]
+    journal: "ACM Transactions on Graphics"
+    volume: 42
+    issue: 4
+    year: 2023
+  - type: software
+    title: "GeoSplat: local DJI video to georeferenced 3D Gaussian Splatting"
+    authors: [{family-names: Wijaya, given-names: Helmy Mukti}, {family-names: Handayani, given-names: Hepi Hapsari},
+              {family-names: Hariyanto, given-names: Teguh}, {name: Harintaka}]
+    url: "https://github.com/helmymukti/GeoSplat"
+    version: 0.2.0
+    year: 2026

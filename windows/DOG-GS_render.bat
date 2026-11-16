@@ -1,38 +1,25 @@
 @echo off
 setlocal EnableDelayedExpansion
-title DOG-GS - Direct Orthophoto Generation
-rem Seret (drag-and-drop) file .ply hasil Gaussian Splatting, atau folder proyek GeoSplat, ke file ini.
-call "%~dp0_find_python.bat" || (pause & exit /b 1)
+title DOG-GS command-line render
+rem Command-line alternative to the app: drag a Gaussian .PLY or a GeoSplat project folder onto this file.
+cd /d "%~dp0.."
+if not exist ".venv\Scripts\python.exe" (
+  call "%~dp0..\setup\install.bat" || (pause & exit /b 1)
+)
 if "%~1"=="" (
-  echo Seret file .ply atau folder GeoSplat ke file ini, atau ketik path-nya:
-  set /p "INPUT=Path: "
+  set /p "INPUT=Path to .ply or GeoSplat folder: "
 ) else (
   set "INPUT=%~1"
 )
 set "INPUT=!INPUT:"=!"
-echo.
-echo Input : !INPUT!
-echo.
 set "GSD=0.06"
-set /p "GSD=GSD orthophoto dalam meter [0.06]: "
-set "ZMIN="
-set /p "ZMIN=Buang Gaussian di bawah tinggi (m, kosong = tidak) []: "
-set "ZMAX="
-set /p "ZMAX=Buang Gaussian di atas tinggi / floater (m, kosong = tidak) []: "
-set "COL=sh"
-set /p "COL=Warna: sh (nadir) atau dc [sh]: "
-set "ARGS=--gsd !GSD! --colour !COL!"
-if not "!ZMIN!"=="" set "ARGS=!ARGS! --zmin !ZMIN!"
-if not "!ZMAX!"=="" set "ARGS=!ARGS! --zmax !ZMAX!"
-echo.
-"%PY%" -m doggs.cli render "!INPUT!" !ARGS!
-if errorlevel 1 (
-  echo.
-  echo Proses gagal. Jalankan install_DOG-GS.bat terlebih dahulu bila belum.
-  pause
-  exit /b 1
-)
-echo.
-echo Selesai.
-if exist "!INPUT!\11_DOG-GS" (start "" explorer "!INPUT!\11_DOG-GS") else (for %%F in ("!INPUT!") do if exist "%%~dpFDOG-GS_output" start "" explorer "%%~dpFDOG-GS_output")
+set /p "GSD=Orthophoto GSD in metres [0.06]: "
+set "ZMIN=auto"
+set /p "ZMIN=Lower height limit in metres, auto or none [auto]: "
+set "ZMAX=auto"
+set /p "ZMAX=Upper height limit in metres (floaters), auto or none [auto]: "
+set "ARGS=--gsd !GSD!"
+if /i not "!ZMIN!"=="none" set "ARGS=!ARGS! --zmin !ZMIN!"
+if /i not "!ZMAX!"=="none" set "ARGS=!ARGS! --zmax !ZMAX!"
+".venv\Scripts\python.exe" -m doggs.cli render "!INPUT!" !ARGS!
 pause
