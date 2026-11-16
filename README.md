@@ -7,7 +7,24 @@ rasterization operator. No dense point cloud, mesh, DSM interpolation or orthore
 step is needed: one rendering pass produces georeferenced GeoTIFFs.
 
 On a 1.07 M-Gaussian model of the ITS Research Center (Surabaya), a 8455 × 8455 px orthophoto at
-0.06 m GSD is rendered in about 35 s on a 2-core CPU (C backend, no GPU).
+0.06 m GSD is rendered in about 7 s on a laptop CPU (Numba backend; 16 s for the whole job including reading,
+writing and the RTK height check), or about 35 s on a 2-core CPU with the C backend. No GPU is
+needed.
+
+## Example results
+
+ITS Research Center, Surabaya — GeoSplat v0.2.0 model from one DJI video (216 frames),
+1.07 M Gaussians, UTM 49S (EPSG:32749).
+
+![DOG-GS orthophoto overview](docs/images/ortho_overview.jpg)
+*Orthophoto, 0.06 m GSD, 8455 × 8455 px (shown downsampled). The circular footprint is the
+GeoSplat valid region; the smeared rim is where the model has few views.*
+
+![DOG-GS orthophoto detail](docs/images/ortho_detail.jpg)
+*Full-resolution crop, 90 × 60 m at 0.06 m GSD (no resampling).*
+
+![DOG-GS median-depth DSM](docs/images/dsm_hillshade.jpg)
+*Median-depth DSM rendered in the same pass, ellipsoidal heights, hillshaded.*
 
 ## Method
 
@@ -50,6 +67,10 @@ Backends (`--backend auto` picks the first available):
 All three run the same compositing kernel; the test-suite checks that they agree.
 
 ## Desktop app (Windows)
+
+![DOG-GS desktop app](docs/images/app_screenshot.png)
+*The DOG-GS app after processing a GeoSplat v0.2.0 project: the vertically corrected `_hcorr`
+model and the RTK checkpoints are picked up automatically from the project folder.*
 
 1. Double-click **`DOG-GS.bat`**. The first run creates a private `.venv` in this folder and installs
    DOG-GS with Numba, OpenCV and PySide6 (Python 3.9+ and an internet connection are needed once).
