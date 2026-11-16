@@ -11,3 +11,5 @@ doggs_out/
 *.tif
 !tests/data/*.tif
 DOG-GS_crash.log
+.venv/
+_publish/

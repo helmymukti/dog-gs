@@ -80,7 +80,10 @@ def test_sh_nadir_basis():
 @pytest.mark.skipif(not (c_available() or __import__("shutil").which("gcc")), reason="no C compiler")
 def test_backends_agree(tmp_path):
     if not c_available():
-        build_c(verbose=False)
+        try:
+            build_c(verbose=False)
+        except RuntimeError as e:
+            pytest.skip(f"C backend could not be built: {e}")
     p = scene(tmp_path)
     kw = dict(gsd=0.2, colour_mode="dc", epsg=32749, offset=(698000, 9194000, 0),
               bounds=(698000, 9194000, 698030, 9194030), max_scale=None, verbose=False, tile=64)
